@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
+  <div>
+    <div class="container">
+      <h1>Menu Category</h1>
+      <div class="contact">
+        <form class="form" action="/addcategory" method="POST">
+          <fieldset>
+            <div class="menu-item">
+              <div class="contactform">
+                <div class="left">
+                  <div class="input-fields">
+                    <label for="CategoryName">Category Name:</label>
+                    <input type="text" name="CategoryName" id="CategoryName" required />
+                  </div>
+                  <div class="input-fields">
+                    <label for="categoryDescription">Description:</label>
+                    <textarea name="Description" id="categoryDescription" rows="5" cols="120" required></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <% if (messages.success) { %>
+            <div class="success-message"><%= messages.success %></div>
+            <% } else if (messages.error) { %>
+            <div class="error-message"><%= messages.error %></div>
+            <% } %>
+            <div class="input-fields btns">
+              <input class="submit button" type="submit" value="ADD CATEGORY" />
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <h1>Menu Item</h1>
+      <div class="contact">
+        <form class="form" action="/addmenuitem" method="POST">
+          <fieldset>
+            <div class="menu-item">
+              <div class="contactform">
+                <div class="left">
+                  <div class="input-fields">
+                    <label for="Category">Category:</label>
+                    <select name="Category" id="itemCategory" required>
+                      <% categories.forEach(category => { %>
+                      <option value="<%= category._id %>"><%= category.CategoryName %></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                  <div class="input-fields">
+                    <label for="ItemName">Item Name:</label>
+                    <input type="text" name="ItemName" id="ItemName" required />
+                  </div>
+                  <div class="input-fields">
+                    <label for="Price">Price:</label>
+                    <input type="number" name="Price" id="Price" step="0.1" required />
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="input-fields">
+                    <label for="itemDescription">Description:</label>
+                    <textarea name="Description" id="itemDescription" rows="8" cols="60" required></textarea>
+                  </div>
+                  <div class="input-fields">
+                    <label for="AvailableQuantity">Item Quantity:</label>
+                    <input type="number" name="AvailableQuantity" id="AvailableQuantity" step="0.1" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <% if (messages.menusuccess) { %>
+            <div class="success-message"><%= messages.menusuccess %></div>
+            <% } else if (messages.menuerror) { %>
+            <div class="error-message"><%= messages.menuerror %></div>
+            <% } %>
+
+            <div class="input-fields btns">
+              <input class="submit button" type="submit" value="ADD TO MENU" />
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <h1>Menu</h1>
+      <div class="contact">
+        <% if (messages.removesuccess) { %>
+        <div class="success-message"><%= messages.removesuccess %></div>
+        <% } else if (messages.removeerror) { %>
+        <div class="error-message"><%= messages.removeerror %></div>
+        <% } %>
+        <div class="form">
+          <fieldset>
+            <% for (let i = 0; i < menuItems.length; i++) { %>
+            <div class="product-card">
+              <div class="product-info">
+                <h3 class="product-title"><%= menuItems[i].ItemName %></h3>
+                <p class="product-description"><%= menuItems[i].Description %></p>
+                <p class="product-price">$<%= menuItems[i].Price.toFixed(2) %></p>
+              </div>
+              <div class="input-fields btns">
+                <form action="/removeitem" method="POST">
+                  <input type="hidden" name="ItemId" value="<%= menuItems[i]._id %>">
+                  <button class="btn remove-button" type="submit">REMOVE</button>
+                </form>
+              </div>
+            </div>
+            <% } %>
+            <br>
+            <div class="input-fields btns">
+
+              <form action="/pdf" method="POST">
+                <input class="submit button" type="submit" value="Print Menu" />
+              </form>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('./partials/footer') %>
+</body>
+
+</html>

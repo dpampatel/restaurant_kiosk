@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipt</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
+  <header>
+    <h1>Receipt</h1>
+  </header>
+  <div class="contact">
+    <form class="form" id="r-print" action="/generate-pdf" method="post">
+
+      <fieldset class="r-receipt">
+        <h2>Committers</h2>
+        <br>
+        <div class="contactform">
+          <div class="left">
+            <div class="commiters-details">
+              <p>Street: 108 University Ave</p>
+              <p>City: Waterloo</p>
+              <p>Province: Ontario, N2J 2W2</p>
+              <p>Email: committers@Committers.com</p>
+              <p>Phone No.: +1234567890</p>
+            </div>
+          </div>
+          <div class="right">
+            <div class="receipt-payment-details">
+              <div class="payment-info">
+                <p>Receipt Id: <%= receipt._id %></p>
+                <br>
+
+                <p><%- (new Date()).toLocaleString('en-US', {
+                    weekday: 'short',
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                  }) %></p>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="paid-by">
+          <p>Paid By: <%= customer._id %></p>
+          <p>Customer Name: <%= customer.FirstName %> <%= customer.LastName %></p>
+          <p>Phone No.: <%= customer.PhoneNumber %></p>
+          <p>Email: <%= customer.EmailAddress %></p>
+        </div>
+        <br>
+        <div class="order-items">
+          <h2>Order Items</h2>
+          <table>
+            <thead>
+              <tr>
+                <!-- <th>Order ID</th> -->
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Sub Total</th>
+                <th>Tax</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orderItems.forEach(item => { %>
+              <tr>
+                <!-- <td>< %= item.Order %></td> -->
+                <td><%= item.ItemName %></td>
+                <td><%= item.Quantity %></td>
+                <td>$<%= item.Subtotal.toFixed(2) %></td>
+                <td>$<%= item.TaxAmount.toFixed(2) %></td>
+                <td>$<%= item.OrderTotal.toFixed(2) %></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+        <br>
+        <br>
+        <div class="receipt-total">
+          <p>Payment Method: <%= receipt.PaymentMethod %></p>
+          <p>Total: $<%= receipt.TotalAmount.toFixed(2) %></p>
+        </div>
+        <br>
+        <div class="input-fields btns">
+          <button class="btn add-button" type="submit">Print Receipt</button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <%- include('./partials/footer') %>
+  <script>
+    function printReceipt() {
+      var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+      mywindow.document.write('<html><head><title>' + document.title + '</title>');
+      mywindow.document.write('</head><body >');
+
+      mywindow.document.write('<h1>' + document.title + '</h1>');
+      mywindow.document.write(document.getElementById("r-print").innerHTML);
+      mywindow.document.write('</body></html>');
+
+      mywindow.document.close(); // necessary for IE >= 10
+      mywindow.focus(); // necessary for IE >= 10*/
+
+      mywindow.print();
+      mywindow.close();
+
+      return true;
+    }
+  </script>
+</body>
+
+</html>

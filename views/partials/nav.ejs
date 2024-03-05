@@ -1,0 +1,99 @@
+<nav>
+  <span class="logo">
+    <a href="customer"><span><b class="active">COMMITTERS - RCOS</b></span></a>
+  </span>
+  <div class="menu-icon">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+  <ul class="nav-list">
+    <li><a class="" href="customer">CUSTOMER</a></li>
+    <li><a class="" href="menu">MENU</a></li>
+    <li><a class="" href="place_order">PLACE ORDER</a></li>
+    <li><a class="" href="order_list">ORDER LIST</a></li>
+  </ul>
+</nav>
+
+<button id="changeFont" class="btn button changebtn">Change Font Style</button>
+<div class="fontsize">
+  <p>CHANGE FONT SIZE</p>
+  <input
+    type="range"
+    id="fontSizeRange"
+    min="14"
+    max="28"
+    step="1"
+    value="16"
+  />
+</div>
+<script>
+  const menuIcon = document.querySelector(".menu-icon");
+  const navList = document.querySelector(".nav-list");
+  const nav = document.querySelector("nav");
+  const navTop = nav.offsetTop;
+  const changeFont = document.getElementById("changeFont");
+  const fontSizeRange = document.getElementById("fontSizeRange");
+
+  menuIcon.addEventListener("click", () => {
+    navList.classList.toggle("active");
+    menuIcon.classList.toggle("active");
+  });
+  window.addEventListener("scroll", () => {
+    if (window.pageYOffset > navTop) {
+      nav.classList.add("sticky");
+    } else {
+      nav.classList.remove("sticky");
+    }
+  });
+
+  changeFont.addEventListener("click", () => {
+    document.body.classList.toggle("font-changed");
+    document.querySelectorAll("input").forEach((item, i) => {
+      item.classList.toggle("font-changed");
+    });
+    document.querySelectorAll("button").forEach((item, i) => {
+      item.classList.toggle("font-changed");
+    });
+
+    const fontFlag = document.body.classList.contains("font-changed");
+    localStorage.setItem("fontPreference", fontFlag);
+  });
+
+  fontSizeRange.addEventListener("input", () => {
+    const fontSize = fontSizeRange.value + "px";
+    document.body.style.fontSize = fontSize;
+
+    document.querySelectorAll("input").forEach((item, i) => {
+      item.style.fontSize = fontSizeRange.value - 4 + "px";
+    });
+    document.querySelectorAll("button").forEach((item, i) => {
+      item.style.fontSize = fontSizeRange.value - 4 + "px";
+    });
+    localStorage.setItem("fontSizePreference", fontSize);
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const fontStored = localStorage.getItem("fontPreference");
+    if (fontStored === "true") {
+      document.body.classList.add("font-changed");
+      document.querySelectorAll("input").forEach((item, i) => {
+        item.classList.add("font-changed");
+      });
+      document.querySelectorAll("button").forEach((item, i) => {
+        item.classList.add("font-changed");
+      });
+    }
+    const storedFontSize = localStorage.getItem("fontSizePreference");
+    if (storedFontSize) {
+      fontSizeRange.value = parseInt(storedFontSize, 10);
+      document.body.style.fontSize = storedFontSize + "px";
+      document.querySelectorAll("input").forEach((item, i) => {
+        item.style.fontSize = storedFontSize - 4 + "px";
+      });
+      document.querySelectorAll("button").forEach((item, i) => {
+        item.style.fontSize = storedFontSize - 4 + "px";
+      });
+    }
+  });
+</script>
